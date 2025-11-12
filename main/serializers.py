@@ -76,7 +76,7 @@ class ArticleSerializer(serializers.Serializer):
         return instance
 
     def to_representation(self, instance):
-        data = super().to_dataresentation(instance)
+        data = super().to_representation(instance)
         data["author"] = AuthorSerializer(instance.author).data
         
         return data
