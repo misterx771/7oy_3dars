@@ -49,10 +49,10 @@ class BookSerializer(serializers.Serializer):
         return instance
 
     def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep["author"] = AuthorSerializer(instance.author).data
+        data = super().to_representation(instance)
+        data["author"] = AuthorSerializer(instance.author).data
         
-        return rep
+        return data
 
 
 class ArticleSerializer(serializers.Serializer):
@@ -76,7 +76,7 @@ class ArticleSerializer(serializers.Serializer):
         return instance
 
     def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        rep["author"] = AuthorSerializer(instance.author).data
+        data = super().to_dataresentation(instance)
+        data["author"] = AuthorSerializer(instance.author).data
         
-        return rep
+        return data
