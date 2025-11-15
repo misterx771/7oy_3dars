@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 from .models import Author, Book, Article
 from .serializers import AuthorSerializer, BookSerializer, ArticleSerializer
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 class AuthorListCreateView(APIView):
     def get(self, request):
@@ -55,55 +56,14 @@ class AuthorDetailView(APIView):
         return Response({"message": "Author deleted"})
 
 
-class BookListCreateView(APIView):
-    def get(self, request):
-        books = Book.objects.all()
-        serializer = BookSerializer(books, many=True)
-        
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = BookSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors)
+class BookListCreateView(ListCreateAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
 
 
-class BookDetailView(APIView):
-    def get(self, request, pk):
-        book = get_object_or_404(Book, pk=pk)
-        serializer = BookSerializer(book)
-        
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        book = get_object_or_404(Book, pk=pk)
-        serializer = BookSerializer(book, data=request.data)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors)
-
-    def patch(self, request, pk):
-        book = get_object_or_404(Book, pk=pk)
-        serializer = BookSerializer(book, data=request.data, partial=True)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        
-        return Response(serializer.errors)
-
-    def delete(self, request, pk):
-        book = get_object_or_404(Book, pk=pk)
-        book.delete()
-        
-        return Response({"message": "Book deleted"})
+class BookDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
 
 
 class ArticleListCreateView(APIView):
